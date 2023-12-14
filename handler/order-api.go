@@ -58,6 +58,7 @@ func (o *OrderApi) UpdateOrder(ctx context.Context, req *orderapi.UpdateOrderReq
 		fmt.Println(err)
 		return err
 	}
+
 	res.Rowaffectd = int64(r.RowsAffected)
 	return nil
 }
@@ -70,12 +71,15 @@ func (o *OrderApi) GetOrder(ctx context.Context, req *orderapi.GetOrderRequest, 
 		fmt.Println(err)
 		return err
 	}
+	fmt.Println(data)
 
-	res.Data.OrderData = data.OrderData.OrderData
-	res.Data.OrderId = data.OrderData.OrderId
-	res.Data.OrderVersion = data.OrderData.OrderVersion
-	res.Data.Status = orderapi.OrderStatus(data.OrderData.Status)
-	res.Data.UserId = data.OrderData.UserId
+	res.Data = &orderapi.OrderInfo{
+		OrderData:    data.OrderData.OrderData,
+		OrderId:      data.OrderData.OrderId,
+		OrderVersion: data.OrderData.OrderVersion,
+		Status:       orderapi.OrderStatus(data.OrderData.Status),
+		UserId:       data.OrderData.UserId,
+	}
 
 	return nil
 }
