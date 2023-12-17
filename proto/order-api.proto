@@ -12,7 +12,7 @@ enum OrderStatus {
 }
 
 message OrderInfo {
-	int64 OrderId = 1;
+	string OrderId = 1;
 	int64 OrderVersion = 2;
 	int64 UserId = 3;
 	string OrderData = 4;	
@@ -20,10 +20,12 @@ message OrderInfo {
 }
 
 service OrderApi {
-	rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
-	rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse);
-	rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+	rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse){}
+	rpc UpdateOrder(UpdateOrderRequest) returns (UpdateOrderResponse){}
+	rpc GetOrder(GetOrderRequest) returns (GetOrderResponse){}
+	rpc GenerateUUID (Empty) returns (GenerateUUIDResponse) {}
 }
+
 
 message CreateOrderRequest {
 	OrderInfo data = 1;
@@ -42,9 +44,15 @@ message UpdateOrderResponse {
 }
 
 message GetOrderRequest {
-	int64 orderid = 1;	// 雪花算法生成的订单ID
+	string orderid = 1;	// uuid
 }
 
 message GetOrderResponse {
 	OrderInfo data = 1;
+}
+
+message Empty {}
+
+message GenerateUUIDResponse {
+	string uuid=1; 
 }

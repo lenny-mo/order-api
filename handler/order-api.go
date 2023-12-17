@@ -16,6 +16,7 @@ import (
 //		CreateOrder(context.Context, *CreateOrderRequest, *CreateOrderResponse) error
 //		UpdateOrder(context.Context, *UpdateOrderRequest, *UpdateOrderResponse) error
 //		GetOrder(context.Context, *GetOrderRequest, *GetOrderResponse) error
+//		GenerateUUID(context.Context, *Empty, *GenerateUUIDResponse) error
 //	}
 type OrderApi struct {
 	order.OrderService
@@ -80,6 +81,17 @@ func (o *OrderApi) GetOrder(ctx context.Context, req *orderapi.GetOrderRequest, 
 		Status:       orderapi.OrderStatus(data.OrderData.Status),
 		UserId:       data.OrderData.UserId,
 	}
+
+	return nil
+}
+
+func (o *OrderApi) GenerateUUID(ctx context.Context, req *orderapi.Empty, res *orderapi.GenerateUUIDResponse) error {
+	data, err := o.OrderService.GenerateUUID(ctx, &order.Empty{})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	res.Uuid = data.Uuid
 
 	return nil
 }

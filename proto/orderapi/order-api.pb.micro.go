@@ -45,6 +45,7 @@ type OrderApiService interface {
 	CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...client.CallOption) (*CreateOrderResponse, error)
 	UpdateOrder(ctx context.Context, in *UpdateOrderRequest, opts ...client.CallOption) (*UpdateOrderResponse, error)
 	GetOrder(ctx context.Context, in *GetOrderRequest, opts ...client.CallOption) (*GetOrderResponse, error)
+	GenerateUUID(ctx context.Context, in *Empty, opts ...client.CallOption) (*GenerateUUIDResponse, error)
 }
 
 type orderApiService struct {
@@ -89,12 +90,23 @@ func (c *orderApiService) GetOrder(ctx context.Context, in *GetOrderRequest, opt
 	return out, nil
 }
 
+func (c *orderApiService) GenerateUUID(ctx context.Context, in *Empty, opts ...client.CallOption) (*GenerateUUIDResponse, error) {
+	req := c.c.NewRequest(c.name, "OrderApi.GenerateUUID", in)
+	out := new(GenerateUUIDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for OrderApi service
 
 type OrderApiHandler interface {
 	CreateOrder(context.Context, *CreateOrderRequest, *CreateOrderResponse) error
 	UpdateOrder(context.Context, *UpdateOrderRequest, *UpdateOrderResponse) error
 	GetOrder(context.Context, *GetOrderRequest, *GetOrderResponse) error
+	GenerateUUID(context.Context, *Empty, *GenerateUUIDResponse) error
 }
 
 func RegisterOrderApiHandler(s server.Server, hdlr OrderApiHandler, opts ...server.HandlerOption) error {
@@ -102,6 +114,7 @@ func RegisterOrderApiHandler(s server.Server, hdlr OrderApiHandler, opts ...serv
 		CreateOrder(ctx context.Context, in *CreateOrderRequest, out *CreateOrderResponse) error
 		UpdateOrder(ctx context.Context, in *UpdateOrderRequest, out *UpdateOrderResponse) error
 		GetOrder(ctx context.Context, in *GetOrderRequest, out *GetOrderResponse) error
+		GenerateUUID(ctx context.Context, in *Empty, out *GenerateUUIDResponse) error
 	}
 	type OrderApi struct {
 		orderApi
@@ -124,4 +137,8 @@ func (h *orderApiHandler) UpdateOrder(ctx context.Context, in *UpdateOrderReques
 
 func (h *orderApiHandler) GetOrder(ctx context.Context, in *GetOrderRequest, out *GetOrderResponse) error {
 	return h.OrderApiHandler.GetOrder(ctx, in, out)
+}
+
+func (h *orderApiHandler) GenerateUUID(ctx context.Context, in *Empty, out *GenerateUUIDResponse) error {
+	return h.OrderApiHandler.GenerateUUID(ctx, in, out)
 }
