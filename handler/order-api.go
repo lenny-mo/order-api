@@ -52,6 +52,7 @@ func (o *OrderApi) UpdateOrder(ctx context.Context, req *orderapi.UpdateOrderReq
 			OrderData:    req.Data.OrderData,
 			Status:       order.OrderStatus(req.Data.Status),
 		},
+		Oldversion: req.Oldversion, //
 	}
 
 	r, err := o.OrderService.UpdateOrder(ctx, &orderRes)

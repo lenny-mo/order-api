@@ -37,6 +37,7 @@ message CreateOrderResponse {
 
 message UpdateOrderRequest {
 	OrderInfo data = 1;
+	int64 oldversion =2; 
 }
 
 message UpdateOrderResponse {
