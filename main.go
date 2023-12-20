@@ -53,7 +53,6 @@ func main() {
 		return
 	}
 
-	tracer.InitTracer("orderapi", "127.0.0.1:6831")
 	// 启动服务
 	if err := service.Run(); err != nil {
 		fmt.Println(err)
