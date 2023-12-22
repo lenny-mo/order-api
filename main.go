@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/lenny-mo/emall-utils/tracer"
+	"github.com/lenny-mo/order-api/circuit"
 	"github.com/lenny-mo/order-api/handler"
 	"github.com/lenny-mo/order-api/proto/orderapi"
 	"github.com/lenny-mo/order/proto/order"
@@ -41,6 +42,8 @@ func main() {
 		micro.Registry(consulRegistry),
 		// 添加链路追踪
 		micro.WrapClient(opentracing2.NewClientWrapper(opentracing.GlobalTracer())),
+		// 添加下游的熔断
+		micro.WrapClient(circuit.NewClientWrapper()),
 	)
 	service.Init()
 
